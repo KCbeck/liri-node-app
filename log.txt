@@ -1,0 +1,1 @@
+TypeError: Cannot read property 'artists' of undefinedTypeError: Cannot read property 'artists' of undefinedTypeError: Cannot read property 'artists' of undefined
