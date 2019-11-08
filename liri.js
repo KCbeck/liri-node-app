@@ -4,39 +4,36 @@
 require("dotenv").config();
 
 // Import the node-spotify-api NPM package.
-var Spotify = require("node-spotify-api");
+const Spotify = require("node-spotify-api");
 
 // Import the API keys
-var keys = require("./keys");
+const keys = require("./keys");
 
 // Import the axios npm package.
-var axios = require("axios");
+const axios = require("axios");
 
 // Import the moment npm package.
-var moment = require("moment");
+const moment = require("moment");
 
 // Import the FS package for read/write.
-var fs = require("fs");
+const fs = require("fs");
 
 // Initialize the spotify API client using our client id and secret
-var spotify = new Spotify(keys.spotify);
+const spotify = new Spotify(keys.spotify);
 
 // FUNCTIONS
 // =====================================
 
 // Helper function that gets the artist name
-var getArtistNames = function(artist) {
-  return artist.name;
-};
+var sArtists = function(artist) {
+    return artist.name;};
 
 // Function for running a Spotify search
-var getMeSpotify = function(songName) {
-    if (!songName) {
-        songName = "The Sign, Ace of Base";
-    }
+var sSpotify = function(track) { if(!track) { 
+    track = "The Sign, Ace of Base";
+}
 
-  spotify.search({type: "track", query: songName,limit: 1},
-    function(err, data) {
+  spotify.search({type: "track", query: track,limit: 1}, function(err, data) {
       if (err) {
         console.log("Error occurred: " + err);
         return;
@@ -46,7 +43,7 @@ var getMeSpotify = function(songName) {
 
       for (var i = 0; i < songs.length; i++) {
         console.log(i);
-        console.log("artist(s): " + songs[i].artists.map(getArtistNames));
+        console.log("artist(s): " + songs[i].artists.map(sArtists));
         console.log("song name: " + songs[i].name);
         console.log("preview song: " + songs[i].preview_url);
         console.log("album: " + songs[i].album.name);
@@ -63,8 +60,7 @@ var getMyBands = function(artist) {
     function(response) {
       var jsonData = response.data;
 
-      if (!jsonData.length) {
-        console.log("No results found for " + artist);
+      if (!jsonData.length) { console.log("No results found for " + artist);
         return;
       }
 
@@ -93,17 +89,16 @@ var getMyBands = function(artist) {
 // Function for running a Movie Search
 var getMeMovie = function(movieName) {
     if (!movieName) {
-        movieName = "Mr. Nobody.";
+        movieName = "Mr. Nobody."; 
         console.log("If you haven't watched Mr. Nobody, then you should: <http://www.imdb.com/title/tt0485947/>")
-        console.log("It's on Netflix!")
+        console.log("It's on Netflix!");
     }
 
 
   var urlHit =
     "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=full&tomatoes=true&apikey=trilogy";
 
-  axios.get(urlHit).then(
-    function(response) {
+  axios.get(urlHit).then( function(response) {
       var jsonData = response.data;
 
       console.log("Title: " + jsonData.Title);
@@ -114,11 +109,7 @@ var getMeMovie = function(movieName) {
       console.log("Language: " + jsonData.Language);
       console.log("Plot: " + jsonData.Plot);
       console.log("Actors: " + jsonData.Actors);{
-      if (!movieName) {
-        movieName = "Mr. Nobody.";
-        console.log("If you haven't watched Mr. Nobody, then you should: <http://www.imdb.com/title/tt0485947/>")
-        console.log("It's on Netflix!")
-      }
+ 
     }
       
     }
@@ -126,8 +117,7 @@ var getMeMovie = function(movieName) {
 };
 
 // Function for running a command based on text file
-var doWhatItSays = function() {
-  fs.readFile("random.txt", "utf8", function(error, data) {
+var doWhatItSays = function() { fs.readFile("random.txt", "utf8", function(error, data) {
     console.log(data);
 
     var dataArr = data.split(",");
@@ -147,7 +137,7 @@ var pick = function(caseData, functionData) {
     getMyBands(functionData);
     break;
   case "spotify-this-song":
-    getMeSpotify(functionData);
+    sSpotify(functionData);
     break;
   case "movie-this":
     getMeMovie(functionData);
