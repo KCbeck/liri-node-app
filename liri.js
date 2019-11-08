@@ -1,49 +1,47 @@
 // DEPENDENCIES
-// =====================================
-// Read and set environment variables
 require("dotenv").config();
 
-// Import the node-spotify-api NPM package.
+// creates a const of Spotify and brings in the node-spotify-api node package.
 const Spotify = require("node-spotify-api");
 
-// Import the API keys
+// creates a const of keys and brings in the API keys
 const keys = require("./keys");
 
-// Import the axios npm package.
+// createa a const of axios and brings in the axios node package.
 const axios = require("axios");
 
-// Import the moment npm package.
+// brings in the the moment node package.
 const moment = require("moment");
 
-// Import the FS package for read/write.
+// creates the FS package  and allows to for read/write.
 const fs = require("fs");
 
-// Initialize the spotify API client using our client id and secret
+// creates a const and sets it equal to keys.spotify
 const spotify = new Spotify(keys.spotify);
 
 // FUNCTIONS
-// =====================================
 
-// Helper function that gets the artist name
-var sArtists = function(artist) {
-    return artist.name;};
 
-// Function for running a Spotify search
-var sSpotify = function(track) { if(!track) { 
+// Helper function that gets the bandNames name
+const sbandNamess = function(bandNames) {
+    return bandNames.name;};
+
+// creates a const and a function for track and inputs the song "Thesign"
+const sSpotify = function(track) { if(!track) { 
     track = "The Sign, Ace of Base";
 }
-
+//https://www.npmjs.com/package/node-spotify-api
   spotify.search({type: "track", query: track,limit: 1}, function(err, data) {
       if (err) {
         console.log("Error occurred: " + err);
         return;
       }
 
-      var songs = data.tracks.items;
+      const songs = data.tracks.items;
 
-      for (var i = 0; i < songs.length; i++) {
+      for (const i = 0; i < songs.length; i++) {
         console.log(i);
-        console.log("artist(s): " + songs[i].artists.map(sArtists));
+        console.log("bandNames(s): " + songs[i].bandNamess.map(sbandNamess));
         console.log("song name: " + songs[i].name);
         console.log("preview song: " + songs[i].preview_url);
         console.log("album: " + songs[i].album.name);
@@ -53,21 +51,21 @@ var sSpotify = function(track) { if(!track) {
   );
 };
 
-var getMyBands = function(artist) {
-  var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
+const concerts = function(bandNames) {
+  const queryURL = "https://rest.bandsintown.com/bandNamess/" + bandNames + "/events?app_id=codingbootcamp";
 
   axios.get(queryURL).then(
     function(response) {
-      var jsonData = response.data;
+      const jsonData = response.data;
 
-      if (!jsonData.length) { console.log("No results found for " + artist);
+      if (!jsonData.length) { console.log("No results found for " + bandNames);
         return;
       }
 
-      console.log("Upcoming concerts for " + artist + ":");
+      console.log("Upcoming concerts for " + bandNames + ":");
 
-      for (var i = 0; i < jsonData.length; i++) {
-        var show = jsonData[i];
+      for (const i = 0; i < jsonData.length; i++) {
+        const show = jsonData[i];
 
         // Print data about each concert
         // If a concert doesn't have a region, display the country instead
@@ -87,19 +85,20 @@ var getMyBands = function(artist) {
 };
 
 // Function for running a Movie Search
-var getMeMovie = function(movieName) {
-    if (!movieName) {
-        movieName = "Mr. Nobody."; 
+const Movies = function(movieTitles) {
+    if (!movieTitles) {
+        movieTitles = "Mr. Nobody."; 
         console.log("If you haven't watched Mr. Nobody, then you should: <http://www.imdb.com/title/tt0485947/>")
         console.log("It's on Netflix!");
     }
 
 
-  var urlHit =
-    "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=full&tomatoes=true&apikey=trilogy";
+  const urlHit =
+    "http://www.omdbapi.com/?t=" + movieTitles + "&y=&plot=full&tomatoes=true&apikey=trilogy";
 
   axios.get(urlHit).then( function(response) {
-      var jsonData = response.data;
+      const 
+      sonData = response.data;
 
       console.log("Title: " + jsonData.Title);
       console.log("Year: " + jsonData.Year);
@@ -117,10 +116,10 @@ var getMeMovie = function(movieName) {
 };
 
 // Function for running a command based on text file
-var doWhatItSays = function() { fs.readFile("random.txt", "utf8", function(error, data) {
+const doWhatItSays = function() { fs.readFile("random.txt", "utf8", function(error, data) {
     console.log(data);
 
-    var dataArr = data.split(",");
+    const dataArr = data.split(",");
 
     if (dataArr.length === 2) {
       pick(dataArr[0], dataArr[1]);
@@ -131,16 +130,16 @@ var doWhatItSays = function() { fs.readFile("random.txt", "utf8", function(error
 };
 
 // Function for determining which command is executed
-var pick = function(caseData, functionData) {
+const pick = function(caseData, functionData) {
   switch (caseData) {
   case "concert-this":
-    getMyBands(functionData);
+    concerts(functionData);
     break;
   case "spotify-this-song":
     sSpotify(functionData);
     break;
   case "movie-this":
-    getMeMovie(functionData);
+    Movies(functionData);
     break;
   case "do-what-it-says":
     doWhatItSays();
@@ -151,7 +150,7 @@ var pick = function(caseData, functionData) {
 };
 
 // Function which takes in command line arguments and executes correct function accordingly
-var runThis = function(argOne, argTwo) {
+const runThis = function(argOne, argTwo) {
   pick(argOne, argTwo);
 };
 
